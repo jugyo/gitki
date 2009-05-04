@@ -1,8 +1,8 @@
 %h2 edit
 
 %form{:action => "/#{@name}", :method => 'post'}
-  %input{:name => 'title', :type => 'text', :size => 80}
+  %input{:name => 'title', :type => 'text', :size => 80, :value => @page[:title]}
   %br
-  %textarea{:name => 'body', :rows => 30, :cols => 80}
+  %textarea{:name => 'body', :rows => 30, :cols => 80}= @page[:body]
   %br
   %input{:type => 'submit', :value => 'Save'}

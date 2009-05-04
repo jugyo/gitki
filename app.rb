@@ -15,10 +15,10 @@ enable :sessions
 
 before do
   @store = GitStore.new(options.git_store)
-  @name = params[:name] || 'home'
 end
 
 get '/' do
+  @name = 'home'
   begin
     wiki @name
   rescue PageNotFound
@@ -27,6 +27,7 @@ get '/' do
 end
 
 get '/:name' do
+  @name = params[:name]
   begin
     wiki @name
   rescue PageNotFound
@@ -36,11 +37,14 @@ end
 
 get '/:name/edit' do
   # TODO: Authentication
+  @name = params[:name]
+  @page = page(@name) || {:title => '', :body => ''}
   haml :edit
 end
 
 post '/:name' do
   # TODO: Authentication
+  @name = params[:name]
   @store[store_path(@name)] = {:title => params['title'], :body => params['body']}
   @store.commit "Save #{@name}"
   redirect "/#{@name}"
@@ -52,9 +56,13 @@ get '/css' do
 end
 
 def wiki(name)
-  @page = @store[store_path(name)]
+  @page = page(name)
   raise PageNotFound, name unless @page
   haml :page
+end
+
+def page(name)
+  @store[store_path(name)]
 end
 
 def store_path(name)
