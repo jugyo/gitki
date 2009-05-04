@@ -1,0 +1,30 @@
+= gitki
+
+== DESCRIPTION:
+
+Gitki is a wiki using git to store data.
+
+== SYNOPSIS:
+
+Run as standalon server:
+
+  ./app.rb
+
+Run on mod_rails:
+
+See:
+http://www.sinatrarb.com/book.html#deployment_passenger
+
+== CONFIGURATION:
+
+setting.yml
+
+  title: wiki title
+  git_store: git repository path to store data (ex ../gitki_store)
+
+== REQUIREMENTS:
+
+* sinatra
+* git_store
+
+See Also: http://github.com/georgi/git_store/tree/master
