@@ -12,7 +12,7 @@ Run as standalon server:
 
 Run on mod_rails:
 
-See:
+See
 http://www.sinatrarb.com/book.html#deployment_passenger
 
 == CONFIGURATION:
