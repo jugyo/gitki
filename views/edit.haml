@@ -1,0 +1,8 @@
+%h2 edit
+
+%form{:action => "/#{@name}", :method => 'post'}
+  %input{:name => 'title', :type => 'text', :size => 80}
+  %br
+  %textarea{:name => 'body', :rows => 30, :cols => 80}
+  %br
+  %input{:type => 'submit', :value => 'Save'}
