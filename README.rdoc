@@ -26,5 +26,6 @@ setting.yml
 
 * sinatra
 * git_store
+* RedCloth
 
 See Also: http://github.com/georgi/git_store/tree/master
