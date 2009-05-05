@@ -67,7 +67,7 @@ def wiki(name)
 end
 
 def page(name)
-  @store[store_path(name)]
+  store[store_path(name)]
 end
 
 def store_path(name)
@@ -75,6 +75,10 @@ def store_path(name)
 end
 
 helpers do
+  def wiki_pages
+    store[options.wiki_page_dir].entries
+  end
+
   def partial(template, options = {})
     options = options.merge({:layout => false})
     template = "#{template.to_s}".to_sym

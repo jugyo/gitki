@@ -10,11 +10,13 @@
         %h1
           %a{:href => '/'}= options.title
 
-      #content
+      #content{:style => 'float: left; width: 70%'}
         = yield
 
-      #navigation
+      #navigation{:style => 'float: right; width: 28%'}
         = partial :navigation
+
+      %div{:style => 'clear: both;'}
 
       #footer
         Powerd by
