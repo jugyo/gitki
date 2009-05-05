@@ -7,9 +7,15 @@
   %body
     #wrap
       #header
-        %h1= options.title
+        %h1
+          %a{:href => '/'}= options.title
 
       #content
         = yield
 
+      #navigation
+        = partial :navigation
+
       #footer
+        Powerd by
+        %a{:href=>'http://github.com/jugyo/gitki'} Gitki

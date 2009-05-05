@@ -1,2 +1,8 @@
-%h3.title= @page[:title]
-.body= @page[:body]
+.page_actions
+  %a{:href => "#{@name}/edit"} edit
+.page
+  .page_header
+    %h3.title= @page[:title]
+  .page_body
+    = @page[:body]
+  .page_footer

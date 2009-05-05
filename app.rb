@@ -17,6 +17,11 @@ before do
   @store = GitStore.new(options.git_store)
 end
 
+get '/css' do
+  content_type 'text/css', :charset => 'utf-8'
+  sass :styles
+end
+
 get '/' do
   @name = 'home'
   begin
@@ -48,11 +53,6 @@ post '/:name' do
   @store[store_path(@name)] = {:title => params['title'], :body => params['body']}
   @store.commit "Save #{@name}"
   redirect "/#{@name}"
-end
-
-get '/css' do
-  content_type 'text/css', :charset => 'utf-8'
-  sass :styles
 end
 
 def wiki(name)
