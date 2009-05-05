@@ -70,4 +70,9 @@ def store_path(name)
 end
 
 helpers do
+  def partial(template, options = {})
+    options = options.merge({:layout => false})
+    template = "#{template.to_s}".to_sym
+    haml(template, options)
+  end
 end
