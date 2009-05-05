@@ -12,6 +12,7 @@ BASE_DIR = File.expand_path(File.dirname(__FILE__)) unless defined? BASE_DIR
 SETTING = YAML.load(open("#{BASE_DIR}/setting.yml")) unless defined? SETTING
 set SETTING
 set :wiki_page_dir, 'wiki'
+set :reserve_pages, ['index', 'css']
 enable :sessions
 
 before do
@@ -34,6 +35,15 @@ get '/' do
   end
 end
 
+get '/index' do
+  haml :index
+end
+
+get '/search' do
+  # TODO
+  raise PageNotFound
+end
+
 get '/:name' do
   @name = params[:name]
   begin
@@ -45,6 +55,9 @@ end
 
 get '/:name/edit' do
   # TODO: Authentication
+  if options.reserve_pages.include?(params[:name])
+    redirect "/#{params[:name]}"
+  end
   @name = params[:name]
   @page = page(@name) || {:title => '', :body => ''}
   haml :edit
@@ -52,6 +65,9 @@ end
 
 post '/:name' do
   # TODO: Authentication
+  if options.reserve_pages.include?(params[:name])
+    redirect "/#{params[:name]}"
+  end
   @name = params[:name]
   @store[store_path(@name)] = {:title => params['title'], :body => params['body']}
   @store.commit "Save #{@name}"
