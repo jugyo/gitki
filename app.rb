@@ -4,6 +4,7 @@
 require 'rubygems'
 require 'sinatra'
 require 'yaml'
+require 'redcloth'
 require 'git_store'
 
 class PageNotFound < StandardError; end
@@ -75,6 +76,10 @@ post '/:name' do
 end
 
 helpers do
+  def page(name)
+    store[store_path(name)]
+  end
+
   def wiki_pages
     pages = {}
     store[options.wiki_page_dir].to_hash.each do |k, v|
@@ -84,13 +89,7 @@ helpers do
   end
 
   def navigation
-    begin
-      template = page('navigation')[:body]
-      engine = Haml::Engine.new(template)
-      engine.render(self)
-    rescue => e
-      "<pre style=\"color: red;\"><code>#{e.class.to_s}: #{e.message}</code></pre>"
-    end
+    textile(page('navigation')[:body])
   end
 
   def partial(template, options = {})
@@ -98,24 +97,24 @@ helpers do
     template = "#{template.to_s}".to_sym
     haml(template, options)
   end
-end
 
-def store
-  @store
-end
+  def store
+    @store
+  end
 
-def wiki(name)
-  @page = page(name)
-  raise PageNotFound, name unless @page
-  haml :page
-end
+  def textile(text)
+    RedCloth.new(text).to_html
+  end
 
-def page(name)
-  store[store_path(name)]
-end
+  def wiki(name)
+    @page = page(name)
+    raise PageNotFound, name unless @page
+    haml :page
+  end
 
-def store_path(name)
-  options.wiki_page_dir + '/' + name + '.yml'
+  def store_path(name)
+    options.wiki_page_dir + '/' + name + '.yml'
+  end
 end
 
 def create_home
