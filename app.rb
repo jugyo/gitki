@@ -3,6 +3,7 @@
 
 require 'rubygems'
 require 'sinatra'
+require 'yaml'
 require 'git_store'
 
 class PageNotFound < StandardError; end
@@ -10,7 +11,7 @@ class PageNotFound < StandardError; end
 BASE_DIR = File.expand_path(File.dirname(__FILE__)) unless defined? BASE_DIR
 SETTING = YAML.load(open("#{BASE_DIR}/setting.yml")) unless defined? SETTING
 set SETTING
-set :store_dir, 'store'
+set :wiki_page_dir, 'wiki'
 enable :sessions
 
 before do
@@ -55,6 +56,10 @@ post '/:name' do
   redirect "/#{@name}"
 end
 
+def store
+  @store
+end
+
 def wiki(name)
   @page = page(name)
   raise PageNotFound, name unless @page
@@ -66,7 +71,7 @@ def page(name)
 end
 
 def store_path(name)
-  options.store_dir + '/' + name + '.yml'
+  options.wiki_page_dir + '/' + name + '.yml'
 end
 
 helpers do
