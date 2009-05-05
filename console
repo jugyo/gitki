@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'irb'
+require 'yaml'
+require 'git_store'
+
+BASE_DIR = File.expand_path(File.dirname(__FILE__))
+SETTING = YAML.load(open("#{BASE_DIR}/setting.yml"))
+
+@store = GitStore.new(SETTING['git_store'])
+
+def store
+  @store
+end
+
+IRB.start
