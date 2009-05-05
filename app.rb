@@ -16,6 +16,8 @@ enable :sessions
 
 before do
   @store = GitStore.new(options.git_store)
+  create_home unless page('home')
+  create_navigation unless page('navigation')
 end
 
 get '/css' do
@@ -56,6 +58,32 @@ post '/:name' do
   redirect "/#{@name}"
 end
 
+helpers do
+  def wiki_pages
+    pages = {}
+    store[options.wiki_page_dir].to_hash.each do |k, v|
+      pages[k.sub(/\.yml$/, '')] = v
+    end
+    pages
+  end
+
+  def navigation
+    begin
+      template = page('navigation')[:body]
+      engine = Haml::Engine.new(template)
+      engine.render(self)
+    rescue => e
+      "<pre style=\"color: red;\"><code>#{e.class.to_s}: #{e.message}</code></pre>"
+    end
+  end
+
+  def partial(template, options = {})
+    options = options.merge({:layout => false})
+    template = "#{template.to_s}".to_sym
+    haml(template, options)
+  end
+end
+
 def store
   @store
 end
@@ -74,14 +102,14 @@ def store_path(name)
   options.wiki_page_dir + '/' + name + '.yml'
 end
 
-helpers do
-  def wiki_pages
-    store[options.wiki_page_dir].entries
-  end
+def create_home
+  template = open(File.dirname(__FILE__) + '/home_template.haml').read
+  store[store_path('home')] = {:title => 'Home', :body => template}
+  store.commit
+end
 
-  def partial(template, options = {})
-    options = options.merge({:layout => false})
-    template = "#{template.to_s}".to_sym
-    haml(template, options)
-  end
+def create_navigation
+  template = open(File.dirname(__FILE__) + '/navigation_template.haml').read
+  store[store_path('navigation')] = {:title => 'Navigation', :body => template}
+  store.commit
 end
