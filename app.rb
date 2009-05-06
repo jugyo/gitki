@@ -6,7 +6,7 @@ require 'sinatra'
 require 'yaml'
 require 'redcloth'
 require 'git_store'
-require 'page'
+require 'lib/gitki'
 include Gitki
 
 class PageNotFound < StandardError; end

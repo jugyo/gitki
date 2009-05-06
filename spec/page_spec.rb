@@ -1,5 +1,5 @@
 $: << File.dirname(__FILE__) + '/../'
-require 'page'
+require 'lib/gitki'
 require 'tmpdir'
 require 'ruby-debug'
 
