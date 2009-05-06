@@ -13,9 +13,9 @@ class PageNotFound < StandardError; end
 
 BASE_DIR = File.expand_path(File.dirname(__FILE__)) unless defined? BASE_DIR
 SETTING = YAML.load(open("#{BASE_DIR}/setting.yml")) unless defined? SETTING
+raise 'Invalid markup type.' unless ['textile', 'markdown'].include?(SETTING['markup'])
+
 set SETTING
-set :wiki_page_dir, 'wiki'
-set :reserve_pages, ['pages', 'css']
 set :haml, {:format => :html5 }
 enable :sessions
 
@@ -32,12 +32,7 @@ get '/css' do
 end
 
 get '/' do
-  @name = 'home'
-  begin
-    wiki @name
-  rescue PageNotFound
-    redirect "/#{@name}/edit"
-  end
+  wiki 'home'
 end
 
 get '/pages' do
@@ -46,24 +41,16 @@ get '/pages' do
 end
 
 get '/:name' do
-  @name = params[:name]
-  begin
-    wiki @name
-  rescue PageNotFound
-    redirect "/#{params[:name]}/edit"
-  end
+  wiki params[:name]
+end
+
+not_found do
+  haml '#error-message Not found'
 end
 
 helpers do
-
   def navigation
     textile(Page.find('navigation')[:body])
-  end
-
-  def partial(template, options = {})
-    options = options.merge({:layout => false})
-    template = "#{template.to_s}".to_sym
-    haml(template, options)
   end
 
   def textile(text)
@@ -71,8 +58,8 @@ helpers do
   end
 
   def wiki(name)
-    @page = Page.find(name)
-    raise PageNotFound, name unless @page
+    @name = name
+    @page = Page.find(@name) || not_found
     haml :page
   end
 
