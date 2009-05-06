@@ -4,7 +4,6 @@
 require 'rubygems'
 require 'sinatra'
 require 'yaml'
-require 'redcloth'
 require 'git_store'
 require 'lib/gitki'
 include Gitki
@@ -13,7 +12,8 @@ class PageNotFound < StandardError; end
 
 BASE_DIR = File.expand_path(File.dirname(__FILE__)) unless defined? BASE_DIR
 SETTING = YAML.load(open("#{BASE_DIR}/setting.yml")) unless defined? SETTING
-raise 'Invalid markup type.' unless ['textile', 'markdown'].include?(SETTING['markup'])
+SETTING['markup'] ||= 'textile'
+raise 'Invalid markup type.' unless markup_types.include?(SETTING['markup'])
 
 set SETTING
 set :haml, {:format => :html5 }
@@ -50,20 +50,16 @@ end
 
 helpers do
   def navigation
-    textile(Page.find('navigation')[:body])
+    markup(Page.find('navigation')[:body])
   end
 
-  def textile(text)
-    RedCloth.new(text).to_html
+  def markup(text)
+    self.__send__(options.markup, text)
   end
 
   def wiki(name)
     @name = name
     @page = Page.find(@name) || not_found
     haml :page
-  end
-
-  def store_path(name)
-    options.wiki_page_dir + '/' + name + '.yml'
   end
 end

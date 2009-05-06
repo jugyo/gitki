@@ -1,10 +1,16 @@
 require 'rubygems'
 require 'git_store'
+require 'redcloth' rescue nil
+require 'rdiscount' rescue nil
 
 module Gitki
   def self.setup(git_store_path, wiki_dir = 'wiki')
     @@store = GitStore.new(git_store_path)
     @@wiki_dir = wiki_dir
+  end
+
+  def markup_types
+    ['html', 'textile', 'markdown']
   end
 
   def store
@@ -13,6 +19,18 @@ module Gitki
 
   def wiki_dir
     @@wiki_dir
+  end
+
+  def textile(text)
+    RedCloth.new(text).to_html
+  end
+
+  def markdown(text)
+    RDiscount.new(text).to_html
+  end
+
+  def html(text)
+    text
   end
 
   def create_default_pages
