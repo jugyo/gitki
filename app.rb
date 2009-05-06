@@ -14,12 +14,13 @@ SETTING = YAML.load(open("#{BASE_DIR}/setting.yml")) unless defined? SETTING
 set SETTING
 set :wiki_page_dir, 'wiki'
 set :reserve_pages, ['index', 'css']
+set :haml, {:format => :html5 }
 enable :sessions
 
 before do
   @store = GitStore.new(options.git_store)
-  create_home unless page('home')
-  create_navigation unless page('navigation')
+  content_type "text/html", :charset => "utf-8"
+  create_default_pages
 end
 
 get '/css' do
@@ -117,14 +118,19 @@ helpers do
   end
 end
 
+def create_default_pages
+  create_home unless page('home')
+  create_navigation unless page('navigation')
+end
+
 def create_home
   template = open(File.dirname(__FILE__) + '/home_template.haml').read
   store[store_path('home')] = {:title => 'Home', :body => template}
-  store.commit
+  store.commit 'Create as defaut'
 end
 
 def create_navigation
   template = open(File.dirname(__FILE__) + '/navigation_template.haml').read
   store[store_path('navigation')] = {:title => 'Navigation', :body => template}
-  store.commit
+  store.commit 'Create as defaut'
 end
