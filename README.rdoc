@@ -21,11 +21,12 @@ setting.yml
 
   title: wiki title
   git_store: git repository path to store data (ex ../gitki_store)
+  markup: markup type (textile or markdown)
 
 == REQUIREMENTS:
 
 * sinatra
 * git_store
-* RedCloth
+* RedCloth or rdiscount
 
 See Also: http://github.com/georgi/git_store/tree/master
