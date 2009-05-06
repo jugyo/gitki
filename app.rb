@@ -6,6 +6,8 @@ require 'sinatra'
 require 'yaml'
 require 'redcloth'
 require 'git_store'
+require 'page'
+include Gitki
 
 class PageNotFound < StandardError; end
 
@@ -17,8 +19,9 @@ set :reserve_pages, ['pages', 'css']
 set :haml, {:format => :html5 }
 enable :sessions
 
+Gitki.setup(SETTING['git_store'])
+
 before do
-  @store = GitStore.new(options.git_store)
   content_type "text/html", :charset => "utf-8"
   create_default_pages
 end
@@ -99,10 +102,6 @@ helpers do
     haml(template, options)
   end
 
-  def store
-    @store
-  end
-
   def textile(text)
     RedCloth.new(text).to_html
   end
@@ -116,21 +115,4 @@ helpers do
   def store_path(name)
     options.wiki_page_dir + '/' + name + '.yml'
   end
-end
-
-def create_default_pages
-  create_home unless page('home')
-  create_navigation unless page('navigation')
-end
-
-def create_home
-  template = open(File.dirname(__FILE__) + '/home_template.haml').read
-  store[store_path('home')] = {:title => 'Home', :body => template}
-  store.commit 'Create as defaut'
-end
-
-def create_navigation
-  template = open(File.dirname(__FILE__) + '/navigation_template.haml').read
-  store[store_path('navigation')] = {:title => 'Navigation', :body => template}
-  store.commit 'Create as defaut'
 end
