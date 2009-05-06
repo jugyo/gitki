@@ -13,7 +13,7 @@ BASE_DIR = File.expand_path(File.dirname(__FILE__)) unless defined? BASE_DIR
 SETTING = YAML.load(open("#{BASE_DIR}/setting.yml")) unless defined? SETTING
 set SETTING
 set :wiki_page_dir, 'wiki'
-set :reserve_pages, ['index', 'css']
+set :reserve_pages, ['pages', 'css']
 set :haml, {:format => :html5 }
 enable :sessions
 
@@ -37,8 +37,8 @@ get '/' do
   end
 end
 
-get '/index' do
-  haml :index
+get '/pages' do
+  haml :pages
 end
 
 get '/search' do
