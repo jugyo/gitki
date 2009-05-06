@@ -41,12 +41,8 @@ get '/' do
 end
 
 get '/pages' do
+  @pages = Page.find_all
   haml :pages
-end
-
-get '/search' do
-  # TODO
-  raise PageNotFound
 end
 
 get '/:name' do
@@ -58,42 +54,10 @@ get '/:name' do
   end
 end
 
-get '/:name/edit' do
-  # TODO: Authentication
-  if options.reserve_pages.include?(params[:name])
-    redirect "/#{params[:name]}"
-  end
-  @name = params[:name]
-  @page = page(@name) || {:title => '', :body => ''}
-  haml :edit
-end
-
-post '/:name' do
-  # TODO: Authentication
-  if options.reserve_pages.include?(params[:name])
-    redirect "/#{params[:name]}"
-  end
-  @name = params[:name]
-  @store[store_path(@name)] = {:title => params['title'], :body => params['body']}
-  @store.commit "Save #{@name}"
-  redirect "/#{@name}"
-end
-
 helpers do
-  def page(name)
-    store[store_path(name)]
-  end
-
-  def wiki_pages
-    pages = {}
-    store[options.wiki_page_dir].to_hash.each do |k, v|
-      pages[k.sub(/\.yml$/, '')] = v
-    end
-    pages
-  end
 
   def navigation
-    textile(page('navigation')[:body])
+    textile(Page.find('navigation')[:body])
   end
 
   def partial(template, options = {})
@@ -107,7 +71,7 @@ helpers do
   end
 
   def wiki(name)
-    @page = page(name)
+    @page = Page.find(name)
     raise PageNotFound, name unless @page
     haml :page
   end

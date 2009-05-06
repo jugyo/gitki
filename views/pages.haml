@@ -3,7 +3,7 @@
     %h3.title Pages
   .page_body
     %ul
-      - wiki_pages.each do |name, page|
+      - @pages.each do |name, page|
         %li
           %a{:href => "/#{name}"}= page[:title].empty? ? name : page[:title]
   .page_footer
