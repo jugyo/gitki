@@ -24,13 +24,14 @@ configure do
   Gitki.setup(SETTING['git_store'])
   Gitki.create_default_pages
 
+  repo_path = File.expand_path SETTING['git_store']
   puts <<-EOS
 
 #{'#' * 60}
 
-  Wiki repository is '#{File.expand_path SETTING['git_store']}'.
+  Wiki repository is '#{repo_path}'.
   You can clone it as follows:
-  % git clone #{File.expand_path SETTING['git_store']}
+  % git clone <user>@<host>:#{repo_path}
 
 #{'#' * 60}
 
