@@ -8,9 +8,8 @@ require 'rdiscount' rescue nil
 
 module Gitki
   class << self
-    def setup(git_store_path, wiki_dir = 'wiki')
+    def setup(git_store_path)
       @@store = GitStore.new(File.expand_path(git_store_path), 'master', true) # use bare repository
-      @@wiki_dir = wiki_dir
       create_default_pages
     end
 
@@ -41,7 +40,11 @@ module Gitki
   end
 
   def wiki_dir
-    @@wiki_dir
+    'wiki'
+  end
+
+  def attachment_dir
+    'files'
   end
 
   def textile(text)
@@ -75,10 +78,6 @@ module Gitki
         store.commit
       end
 
-      def store_path(name)
-        File.join(wiki_dir, name)
-      end
-
       def split_title_and_body(text)
         return nil if text.nil? || text.empty?
         lines = text.split("\n")
@@ -86,6 +85,23 @@ module Gitki
         lines.shift
         body = lines.join("\n")
         {:title => title, :body => body}
+      end
+
+      def store_path(name)
+        File.join(wiki_dir, name)
+      end
+    end
+  end
+
+  class Attachment
+    class << self
+      def find(name)
+        p store_path(name)
+        store[store_path(name)]
+      end
+
+      def store_path(name)
+        File.join(attachment_dir, name)
       end
     end
   end

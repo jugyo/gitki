@@ -3,6 +3,7 @@
 
 require 'rubygems'
 require 'sinatra'
+require 'mime/types'
 require 'yaml'
 require 'lib/gitki'
 include Gitki
@@ -42,6 +43,12 @@ end
 get '/css' do
   content_type 'text/css', :charset => 'utf-8'
   sass :styles
+end
+
+get '/files/:name' do
+  data = Attachment.find(params[:name])
+  content_type MIME::Types.type_for(params[:name]).first.content_type
+  data
 end
 
 get '/' do
