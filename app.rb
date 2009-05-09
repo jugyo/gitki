@@ -22,6 +22,7 @@ configure do
   enable :sessions
 
   Gitki.setup(SETTING['git_store'])
+  Gitki.create_default_pages
 
   puts <<-EOS
 
@@ -38,7 +39,6 @@ end
 
 before do
   content_type "text/html", :charset => "utf-8"
-  create_default_pages
 end
 
 get '/css' do

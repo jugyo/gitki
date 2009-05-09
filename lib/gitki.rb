@@ -4,9 +4,29 @@ require 'redcloth' rescue nil
 require 'rdiscount' rescue nil
 
 module Gitki
-  def self.setup(git_store_path, wiki_dir = 'wiki')
-    @@store = GitStore.new(git_store_path, 'master', true) # use bare repository
-    @@wiki_dir = wiki_dir
+  class << self
+    def setup(git_store_path, wiki_dir = 'wiki')
+      @@store = GitStore.new(File.expand_path(git_store_path), 'master', true) # use bare repository
+      @@wiki_dir = wiki_dir
+      create_default_pages
+    end
+
+    def create_default_pages
+      create_home unless Page.find('home')
+      create_navigation unless Page.find('navigation')
+    end
+
+    def create_home
+      Page.create('home', 'Home', read_template('home_template.haml'))
+    end
+
+    def create_navigation
+      Page.create('navigation', 'Navigation', read_template('navigation_template.haml'))
+    end
+
+    def read_template(name)
+      open(File.dirname(__FILE__) + '/' + name).read
+    end
   end
 
   def markup_types
@@ -31,23 +51,6 @@ module Gitki
 
   def html(text)
     text
-  end
-
-  def create_default_pages
-    create_home unless Page.find('home')
-    create_navigation unless Page.find('navigation')
-  end
-
-  def create_home
-    Page.create('home', 'Home', read_template('home_template.haml'))
-  end
-
-  def create_navigation
-    Page.create('navigation', 'Navigation', read_template('navigation_template.haml'))
-  end
-
-  def read_template(name)
-    open(File.dirname(__FILE__) + '/' + name).read
   end
 
   class Page
