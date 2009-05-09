@@ -8,13 +8,17 @@ Gitki is a wiki using git to store data.
 
 Setup:
 
-  % git clone git://github.com/jugyo/gitki.git
-  % cd gitki
-  % git submodule update --init
+  git clone git://github.com/jugyo/gitki.git
+  cd gitki
+  git submodule update --init
+  cd ~
+  mkdir gitki.git
+  cd gitki.git
+  git init --bare
 
 Run as standalon server:
 
-  % ./app.rb
+  ./app.rb
 
 Run on mod_rails:
 
@@ -26,13 +30,16 @@ http://www.sinatrarb.com/book.html#deployment_passenger
 setting.yml
 
   title: wiki title
-  git_store: git repository path to store data (ex ../gitki_store)
+  git_store: git repository path to store data (ex ~/gitki.git)
   markup: markup type (textile or markdown)
 
 == REQUIREMENTS:
 
 * sinatra
-* git_store
 * RedCloth or rdiscount
+
+To install them as follows:
+
+  sudo gem install sinatra RedCloth rdiscount
 
 See Also: http://github.com/georgi/git_store/tree/master
