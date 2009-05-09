@@ -22,7 +22,6 @@ configure do
   enable :sessions
 
   Gitki.setup(SETTING['git_store'])
-  Gitki.create_default_pages
 
   repo_path = File.expand_path SETTING['git_store']
   puts <<-EOS
@@ -39,6 +38,7 @@ configure do
 end
 
 before do
+  store.refresh!
   content_type "text/html", :charset => "utf-8"
 end
 
