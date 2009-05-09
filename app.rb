@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 
+$: << File.dirname(__FILE__) + '/vendor/git_store/lib'
+
 require 'rubygems'
 require 'sinatra'
 require 'yaml'
@@ -8,12 +10,10 @@ require 'git_store'
 require 'lib/gitki'
 include Gitki
 
-class PageNotFound < StandardError; end
+configure do
+  BASE_DIR = File.expand_path(File.dirname(__FILE__)) unless defined? BASE_DIR
+  SETTING = YAML.load(open("#{BASE_DIR}/setting.yml")) unless defined? SETTING
 
-BASE_DIR = File.expand_path(File.dirname(__FILE__)) unless defined? BASE_DIR
-SETTING = YAML.load(open("#{BASE_DIR}/setting.yml")) unless defined? SETTING
-
-def init
   SETTING['markup'] ||= 'textile'
   raise 'Invalid markup type.' unless markup_types.include?(SETTING['markup'])
 
@@ -78,5 +78,3 @@ helpers do
     haml :page
   end
 end
-
-init
