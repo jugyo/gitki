@@ -21,6 +21,7 @@ module Gitki
       @@store[Page.dir + '/home'] = read_file('home_template.haml')
       @@store[Page.dir + '/navigation'] = read_file('navigation_template.haml')
       @@store[Attachment.dir + '/gitki.png'] = read_file('gitki.png')
+      @@store.commit 'Created defaults'
     end
 
     def read_file(name)
