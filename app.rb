@@ -12,14 +12,29 @@ class PageNotFound < StandardError; end
 
 BASE_DIR = File.expand_path(File.dirname(__FILE__)) unless defined? BASE_DIR
 SETTING = YAML.load(open("#{BASE_DIR}/setting.yml")) unless defined? SETTING
-SETTING['markup'] ||= 'textile'
-raise 'Invalid markup type.' unless markup_types.include?(SETTING['markup'])
 
-set SETTING
-set :haml, {:format => :html5 }
-enable :sessions
+def init
+  SETTING['markup'] ||= 'textile'
+  raise 'Invalid markup type.' unless markup_types.include?(SETTING['markup'])
 
-Gitki.setup(SETTING['git_store'])
+  set SETTING
+  set :haml, {:format => :html5}
+  enable :sessions
+
+  Gitki.setup(SETTING['git_store'])
+
+  puts <<-EOS
+
+#{'#' * 60}
+
+  Wiki repository is '#{File.expand_path SETTING['git_store']}'.
+  You can clone it as follows:
+  % git clone #{File.expand_path SETTING['git_store']}
+
+#{'#' * 60}
+
+  EOS
+end
 
 before do
   content_type "text/html", :charset => "utf-8"
@@ -63,3 +78,5 @@ helpers do
     haml :page
   end
 end
+
+init

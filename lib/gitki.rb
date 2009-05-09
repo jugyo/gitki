@@ -5,7 +5,7 @@ require 'rdiscount' rescue nil
 
 module Gitki
   def self.setup(git_store_path, wiki_dir = 'wiki')
-    @@store = GitStore.new(git_store_path)
+    @@store = GitStore.new(git_store_path, 'master', true) # use bare repository
     @@wiki_dir = wiki_dir
   end
 

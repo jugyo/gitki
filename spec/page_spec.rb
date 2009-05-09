@@ -2,17 +2,21 @@ $: << File.dirname(__FILE__) + '/../'
 require 'lib/gitki'
 require 'tmpdir'
 require 'ruby-debug'
+require 'fileutils'
 
 include Gitki
 
 describe Page do
+
+  REPO = File.join Dir.tmpdir, 'git_store_test'
+
   before do
-    dir = Dir.tmpdir
-    Dir.chdir(dir) do |path|
-      system 'rm', '-rf', '.git'
-      system 'git', 'init'
+    FileUtils.rm_rf REPO
+    Dir.mkdir REPO
+    Dir.chdir(REPO) do |path|
+      system 'git', 'init', '--bare'
     end
-    Gitki.setup(dir)
+    Gitki.setup(REPO)
   end
 
   describe 'when create_default_pages' do
