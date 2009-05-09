@@ -10,23 +10,20 @@ module Gitki
   class << self
     def setup(git_store_path)
       @@store = GitStore.new(File.expand_path(git_store_path), 'master', true) # use bare repository
-      create_default_pages
+      Page.setup('wiki')
+      Attachment.setup('files')
+      if @@store.objects.empty?
+        create_defaults
+      end
     end
 
-    def create_default_pages
-      create_home unless Page.find('home')
-      create_navigation unless Page.find('navigation')
+    def create_defaults
+      @@store[Page.dir + '/home'] = read_file('home_template.haml')
+      @@store[Page.dir + '/navigation'] = read_file('navigation_template.haml')
+      @@store[Attachment.dir + '/gitki.png'] = read_file('gitki.png')
     end
 
-    def create_home
-      Page.create('home', 'Home', read_template('home_template.haml'))
-    end
-
-    def create_navigation
-      Page.create('navigation', 'Navigation', read_template('navigation_template.haml'))
-    end
-
-    def read_template(name)
+    def read_file(name)
       open(File.dirname(__FILE__) + '/' + name).read
     end
   end
@@ -37,14 +34,6 @@ module Gitki
 
   def store
     @@store
-  end
-
-  def wiki_dir
-    'wiki'
-  end
-
-  def attachment_dir
-    'files'
   end
 
   def textile(text)
@@ -61,9 +50,14 @@ module Gitki
 
   class Page
     class << self
+      attr_reader :dir
+      def setup(dir)
+        @dir = dir
+      end
+
       def find_all
         pages = {}
-        store[wiki_dir].to_hash.each do |name, text|
+        store[dir].to_hash.each do |name, text|
           pages[name] = split_title_and_body(text)
         end
         pages
@@ -88,20 +82,24 @@ module Gitki
       end
 
       def store_path(name)
-        File.join(wiki_dir, name)
+        File.join(dir, name)
       end
     end
   end
 
   class Attachment
     class << self
+      attr_reader :dir
+      def setup(dir)
+        @dir = dir
+      end
+
       def find(name)
-        p store_path(name)
         store[store_path(name)]
       end
 
       def store_path(name)
-        File.join(attachment_dir, name)
+        File.join(dir, name)
       end
     end
   end

@@ -28,17 +28,19 @@ describe Gitki do
 
       pages = Page.find_all
       pages.size.should == 2
-    
+
       page = Page.find('home')
       page[:title].should == "Home"
-      page[:body].should == Gitki.read_template('home_template.haml').sub(/\n+\Z/m, '')
 
       page = Page.find('navigation')
       page[:title].should == "Navigation"
-      page[:body].should == Gitki.read_template('navigation_template.haml').sub(/\n+\Z/m, '')
+    end
+
+    it 'should return a file' do
+      Gitki.setup(REPO)
+      file = Attachment.find('gitki.png').should_not == nil
     end
   end
-  
 
   describe 'repository is not empty' do
     before(:each) do
