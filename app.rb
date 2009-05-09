@@ -1,12 +1,9 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 
-$: << File.dirname(__FILE__) + '/vendor/git_store/lib'
-
 require 'rubygems'
 require 'sinatra'
 require 'yaml'
-require 'git_store'
 require 'lib/gitki'
 include Gitki
 

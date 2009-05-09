@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+$: << File.dirname(__FILE__) + '/../vendor/git_store/lib'
+
 require 'rubygems'
 require 'git_store'
 require 'redcloth' rescue nil

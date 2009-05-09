@@ -19,23 +19,17 @@ describe Page do
     Gitki.setup(REPO)
   end
 
-  describe 'when create_default_pages' do
-    before(:each) do
-      create_default_pages
-    end
+  it 'should return 2 pages' do
+    pages = Page.find_all
+    pages.size.should == 2
+    
+    page = Page.find('home')
+    page[:title].should == "Home"
+    page[:body].should == Gitki.read_template('home_template.haml').sub(/\n+\Z/m, '')
 
-    it 'should return 2 pages' do
-      pages = Page.find_all
-      pages.size.should == 2
-      
-      page = Page.find('home')
-      page[:title].should == "Home"
-      page[:body].should == read_template('home_template.haml').sub(/\n+\Z/m, '')
-
-      page = Page.find('navigation')
-      page[:title].should == "Navigation"
-      page[:body].should == read_template('navigation_template.haml').sub(/\n+\Z/m, '')
-    end
+    page = Page.find('navigation')
+    page[:title].should == "Navigation"
+    page[:body].should == Gitki.read_template('navigation_template.haml').sub(/\n+\Z/m, '')
   end
 
   describe 'create 2 page' do
@@ -46,7 +40,7 @@ describe Page do
 
     it 'should return 2 pages' do
       pages = Page.find_all
-      pages.size.should == 2
+      pages.size.should == 4
 
       page = pages['foo']
       page[:title] = 'foo'
