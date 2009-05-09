@@ -28,7 +28,8 @@ configure do
 
   Wiki repository is '#{repo_path}'.
   You can clone it as follows:
-  % git clone <user>@<host>:#{repo_path}
+
+   % git clone <user>@<host>:#{repo_path}
 
 #{'#' * 60}
 
