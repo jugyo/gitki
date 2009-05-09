@@ -46,9 +46,8 @@ get '/css' do
 end
 
 get '/files/:name' do
-  data = Attachment.find(params[:name])
   content_type MIME::Types.type_for(params[:name]).first.content_type
-  data
+  Attachment.find(params[:name])
 end
 
 get '/' do
