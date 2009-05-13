@@ -1,17 +1,13 @@
 #!/usr/bin/env ruby
 
+$: << File.dirname(__FILE__) + '/lib'
+
 require 'rubygems'
 require 'irb'
 require 'yaml'
-require 'git_store'
+require 'gitki'
 
-BASE_DIR = File.expand_path(File.dirname(__FILE__))
-SETTING = YAML.load(open("#{BASE_DIR}/setting.yml"))
-
-@store = GitStore.new(SETTING['git_store'])
-
-def store
-  @store
-end
-
+SETTING = YAML.load(open("#{File.dirname(__FILE__)}/setting.yml"))
+Gitki.setup(SETTING['git_store'])
+include Gitki
 IRB.start
