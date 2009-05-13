@@ -64,6 +64,11 @@ get '/:name' do
   wiki params[:name]
 end
 
+get '/raw/:name' do
+  content_type 'text/plain', :charset => 'utf-8'
+  Page.find(params[:name]).raw
+end
+
 not_found do
   haml '#error-message Not found'
 end

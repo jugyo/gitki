@@ -38,7 +38,7 @@ describe Gitki do
 
     it 'should return a file' do
       Gitki.setup(REPO)
-      file = Attachment.find('gitki.png').should_not == nil
+      file = Attachment.find('gitki.png').should_not be_nil
     end
   end
 

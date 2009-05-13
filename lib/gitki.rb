@@ -73,16 +73,18 @@ module Gitki
       end
     end
 
-    attr_reader :title, :body
+    attr_reader :title, :body, :raw
 
-    def initialize(row)
-      @row = row
-      @title, @body = split_title_and_body(row)
+    def initialize(raw)
+      @raw = raw
+      @title, @body = split_title_and_body(raw)
     end
 
-    def split_title_and_body(row)
-      return nil if row.nil? || row.empty?
-      lines = row.split("\n")
+    private
+
+    def split_title_and_body(raw)
+      return nil if raw.nil? || raw.empty?
+      lines = raw.split("\n")
       title = lines.shift
       lines.shift
       body = lines.join("\n")
