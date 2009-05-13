@@ -68,11 +68,6 @@ module Gitki
         split_title_and_body(store[store_path(name)])
       end
 
-      def create(name, title, body)
-        store[store_path(name)] = "#{title}\n\n#{body}"
-        store.commit
-      end
-
       def split_title_and_body(text)
         return nil if text.nil? || text.empty?
         lines = text.split("\n")

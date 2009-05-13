@@ -58,17 +58,27 @@ describe Gitki do
   describe Page do
     before(:each) do
       Gitki.setup(REPO)
+      @@store.delete('wiki/home')
+      @@store.delete('wiki/navigation')
     end
 
     describe 'create 2 page' do
       before(:each) do
-        Page.create('foo', 'foo', 'foo foo foo')
-        Page.create('bar', 'bar', 'bar bar bar')
+        @@store[Page.dir + '/foo'] = <<-EOS
+foo
+
+foo foo foo
+        EOS
+        @@store[Page.dir + '/bar'] = <<-EOS
+bar
+
+bar bar bar
+        EOS
       end
 
       it 'should return 2 pages' do
         pages = Page.find_all
-        pages.size.should == 4
+        pages.size.should == 2
 
         page = pages['foo']
         page[:title] = 'foo'
