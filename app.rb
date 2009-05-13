@@ -70,7 +70,7 @@ end
 
 helpers do
   def navigation
-    markup(Page.find('navigation')[:body])
+    markup(Page.find('navigation').body)
   end
 
   def markup(text)

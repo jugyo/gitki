@@ -59,27 +59,34 @@ module Gitki
       def find_all
         pages = {}
         store[dir].to_hash.each do |name, text|
-          pages[name] = split_title_and_body(text)
+          pages[name] = self.new(text)
         end
         pages
       end
 
       def find(name)
-        split_title_and_body(store[store_path(name)])
-      end
-
-      def split_title_and_body(text)
-        return nil if text.nil? || text.empty?
-        lines = text.split("\n")
-        title = lines.shift
-        lines.shift
-        body = lines.join("\n")
-        {:title => title, :body => body}
+        self.new(store[store_path(name)])
       end
 
       def store_path(name)
         File.join(dir, name)
       end
+    end
+
+    attr_reader :title, :body
+
+    def initialize(row)
+      @row = row
+      @title, @body = split_title_and_body(row)
+    end
+
+    def split_title_and_body(row)
+      return nil if row.nil? || row.empty?
+      lines = row.split("\n")
+      title = lines.shift
+      lines.shift
+      body = lines.join("\n")
+      [title, body]
     end
   end
 

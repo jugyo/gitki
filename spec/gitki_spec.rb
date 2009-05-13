@@ -30,10 +30,10 @@ describe Gitki do
       pages.size.should == 2
 
       page = Page.find('home')
-      page[:title].should == "Home"
+      page.title.should == "Home"
 
       page = Page.find('navigation')
-      page[:title].should == "Navigation"
+      page.title.should == "Navigation"
     end
 
     it 'should return a file' do
@@ -81,12 +81,12 @@ bar bar bar
         pages.size.should == 2
 
         page = pages['foo']
-        page[:title] = 'foo'
-        page[:body] = 'foo foo foo'
+        page.title.should == 'foo'
+        page.body.should == 'foo foo foo'
 
         page = pages['bar']
-        page[:title] = 'bar'
-        page[:body] = 'bar bar bar'
+        page.title.should == 'bar'
+        page.body.should == 'bar bar bar'
       end
     end
   end

@@ -5,5 +5,5 @@
     %ul
       - @pages.each do |name, page|
         %li
-          %a{:href => "/#{name}"}= page[:title].empty? ? name : page[:title]
+          %a{:href => "/#{name}"}= page.title.empty? ? name : page.title
   .page_footer
