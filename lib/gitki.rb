@@ -65,7 +65,12 @@ module Gitki
       end
 
       def find(name)
-        self.new(store[store_path(name)])
+        data = store[store_path(name)]
+        if data
+          self.new(data)
+        else
+          nil
+        end
       end
 
       def store_path(name)
