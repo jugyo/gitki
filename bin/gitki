@@ -1,0 +1,3 @@
+#!/usr/bin/env ruby
+
+system 'rackup', File.dirname(__FILE__) + '/gitki.ru'
