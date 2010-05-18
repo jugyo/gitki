@@ -6,6 +6,7 @@ require 'sinatra'
 require 'mime/types'
 require 'yaml'
 require 'lib/gitki'
+require 'digest/md5'
 include Gitki
 
 configure do
@@ -48,7 +49,9 @@ end
 
 get '/files/:name' do
   content_type MIME::Types.type_for(params[:name]).first.content_type
-  Attachment.find(params[:name])
+  data = Attachment.find(params[:name])
+  etag Digest::MD5.hexdigest(data)
+  data
 end
 
 get '/' do
