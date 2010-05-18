@@ -3,8 +3,14 @@ $: << File.dirname(__FILE__) + '/../vendor/git_store/lib'
 
 require 'rubygems'
 require 'git_store'
-require 'redcloth' rescue nil
-require 'rdiscount' rescue nil
+begin
+  require 'redcloth'
+rescue LoadError
+end
+begin
+  require 'rdiscount'
+rescue LoadError
+end
 
 module Gitki
   class << self
