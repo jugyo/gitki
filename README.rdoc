@@ -13,9 +13,6 @@ http://gitki.oyguj.org/
 Setup:
 
   git clone git://github.com/jugyo/gitki.git
-  cd gitki
-  git submodule update --init
-  cd ~
   mkdir gitki.git
   cd gitki.git
   git init --bare
@@ -40,13 +37,8 @@ setting.yml
 == REQUIREMENTS:
 
 * sinatra
+* git_store
 * RedCloth or rdiscount
-
-To install them as follows:
-
-  sudo gem install sinatra RedCloth rdiscount
-
-See Also: http://github.com/georgi/git_store/tree/master
 
 == LICENSE:
 
