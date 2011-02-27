@@ -4,10 +4,6 @@
 
 Gitki is a wiki using git to store data.
 
-== DEMO:
-
-http://gitki.oyguj.org/
-
 == SYNOPSIS:
 
 Setup:
